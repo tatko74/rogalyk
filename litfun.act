@@ -1,0 +1,69 @@
+;----------------------
+;
+; rozne drobne funkcje pomocnicze
+;
+; ABS(INT a) - wartosc absolutna
+; DIST(int x,y,x2,y2) - dystans miedzy punktami
+; randr(BYTE a) - rnd w wersji bez zero
+;----------------------
+
+BYTE FUNC ABS(INT a)
+IF a<0 THEN a=a*-1 FI
+RETURN(a)
+
+BYTE FUNC DIST(int x,y,x2,y2)
+int xx,yy
+xx=ABS(x2-x) 
+yy=ABS(y2-y)
+RETURN((xx+yy)/2)
+
+
+; rand w wersji "normalnej"
+BYTE FUNC randr(BYTE a) 
+RETURN(rand(a+1))
+
+; oczekiwanie na klawisz i przerwanie programu
+PROC stop()
+print ("any key")
+ i = GetD(7)
+ BREAK()
+RETURN
+
+; wyliczaniepozycji w PLAN na pODstawie X i Y
+INT FUNC PosP(BYTE x,y) 
+RETURN(y*(mx+1)+x)
+
+; pobierz dane z tablicy PLAN
+BYTE FUNC GETIT(BYTE x,y) 
+RETURN(plan(PosP(x,y)))
+
+; ustaw dane z tablicy PLAN
+PROC SETIT(BYTE x,y,c)
+    plan(PosP(x,y))=c
+RETURN
+
+; pauza wstrzymujaca prace programu na ile*1/50 sek
+Proc Pause(CARD ile)
+  Card zegar=$220
+  zegar=ile
+  DO
+    UNTIL zegar=0
+  OD
+RETURN
+
+;   Odczyt stanu joystick'a
+;   10 14 06
+;   11 15 07
+;   09 13 05
+;   fire +16
+BYTE FUNC Joy(byte nport) 
+byte direct,fire
+  DO
+  ;direct=Stick(nport)
+  direct=peek($0278)
+  fire=peek($0284)
+  if fire=0 then direct=direct+16 fi
+  Until direct#15 or fire#0
+  OD
+  pause(5)
+RETURN(direct)

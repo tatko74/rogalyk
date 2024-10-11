@@ -1,0 +1,86 @@
+PROC Generator_Enemy()
+ZERO(ev,39) ZERO(ec,39) ZERO(ex,39) ZERO(ey,39) ZERO(ed,39) ZERO(ek,39)
+FOR i=0 TO rc-1 
+	DO 
+	IF rcv(i)>0 THEN
+		ev(i)=i+1 ex(i)=rcx(i) ey(i)=rcy(i) 
+		ec(i)=randr(5)+1
+		FI
+	OD
+RETURN
+
+
+
+PROC EneMov()
+BYTE tru,test
+FOR i=0 TO rc-1
+	DO
+		ii=0 tru=0
+		IF ev(i)>0 THEN
+		
+		IF ek(i)=0 THEN ek(i)=randr(8) FI
+				
+		tx=ex(i) ty=ey(i)	
+		ed(i)=dist(hx,hy,tx,ty)
+				IF ed(i)<2 THEN
+				
+					IF hx>tx AND hy=ty THEN ek(i)=2 
+						ELSEIF hx<tx AND hy=ty THEN ek(i)=4 
+						ELSEIF hx=tx AND hy>ty THEN ek(i)=3 
+						ELSEIF hx=tx AND hy<ty THEN ek(i)=1 
+						ELSEIF hx>tx AND hy>ty THEN ek(i)=6 
+						ELSEIF hx<tx AND hy<ty THEN ek(i)=8 
+						ELSEIF hx>tx AND hy<ty THEN ek(i)=5 
+						ELSEIF hx<tx AND hy>ty THEN ek(i)=7 
+						ELSEIF hx=tx AND hy=ty THEN ek(i)=randr(8)
+					FI
+				FI
+				
+				IF ek(i)=1 THEN ii=GETIT(tx,ty-1) IF ii=2 THEN ty=ty-1 tru=1 ELSE ek(i)=randr(8) FI  
+					ELSEIF ek(i)=2 THEN ii=GETIT(tx+1,ty) IF ii=2 THEN tx=tx+1 tru=1 ELSE ek(i)=randr(8) FI 	
+					ELSEIF ek(i)=3 THEN ii=GETIT(tx,ty+1) IF ii=2 THEN ty=ty+1 tru=1 ELSE ek(i)=randr(8) FI 	
+					ELSEIF ek(i)=4 THEN ii=GETIT(tx-1,ty) IF ii=2 THEN tx=tx-1 tru=1 ELSE ek(i)=randr(8) FI 	
+					ELSEIF ek(i)=5 THEN ii=GETIT(tx+1,ty-1) IF ii=2 THEN tx=tx+1 ty=ty-1 tru=1 ELSE ek(i)=randr(8) FI  
+					ELSEIF ek(i)=6 THEN ii=GETIT(tx+1,ty+1) IF ii=2 THEN tx=tx+1 ty=ty+1 tru=1 ELSE ek(i)=randr(8) FI 	
+					ELSEIF ek(i)=7 THEN ii=GETIT(tx-1,ty+1) IF ii=2 THEN tx=tx-1 ty=ty+1 tru=1 ELSE ek(i)=randr(8) FI 	
+					ELSEIF ek(i)=8 THEN ii=GETIT(tx-1,ty-1) IF ii=2 THEN ty=ty-1 tx=tx-1 tru=1 ELSE ek(i)=randr(8) FI 	
+				FI	
+
+			IF tx<>hx OR ty<>hy THEN 
+				
+					FOR test=0 TO rc-1
+					DO
+						IF ev(test)>0 AND ev(test)<>ev(i) THEN
+						IF tx=ex(test) AND ty=ey(test) THEN tru=0 EXIT FI
+						FI
+					OD
+				
+				IF tru=1 THEN ex(i)=tx ey(i)=ty FI
+				FI
+				
+		tru=0 
+		FI
+	OD
+RETURN
+
+PROC EneViz()
+BYTE txi,tyi
+tx=0 ty=0 
+FOR i=0 TO rc-1
+	DO
+	IF ev(i)>0 THEN
+		IF hx>ex(i) THEN tx=hx-ex(i) txi=5-tx ELSE tx=ex(i)-hx txi=5+tx FI
+		IF hy>ey(i) THEN ty=hy-ey(i) tyi=5-ty ELSE ty=ey(i)-hy tyi=5+ty FI
+		IF tx<5 and ty<5  THEN
+		
+			;if ed(i)>1 then 
+				POKE (vram+(((tyi-1)*9)+(txi-1)),ec(i)+137)
+			;	else 
+			;	POKE (vram+(((tyi-1)*9)+(txi-1)),ec(i)+67)
+			;FI
+			FI
+		tx=0 ty=0 
+		FI
+	OD
+RETURN
+

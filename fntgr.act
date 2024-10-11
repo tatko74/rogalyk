@@ -1,0 +1,83 @@
+;----------------------
+;
+; fonty , pusta plansza , inicjalizacja grafiki
+;
+; InitChar() - inicjalizacja grafiki, fontow
+; ClsGr() - kasowanie pamięci ekranu
+; InitCol() - ustawienie kolorow
+; ramka_pusta() - rysowanie pustej ramki gry
+; plansza_pusta() - czyszczenie wnetrza ramki
+;----------------------
+
+
+
+
+
+;---------------------------------- inicjalizacja pamieci,znakow itd
+
+PROC InitChar()
+    BYTE setnew
+    CARD fntmem
+    setnew=PEEK(106)-8
+    POKE(106,setnew)        ;obniżenie gornej granicy ram
+    GRAPHICS(2+16)
+	;GRAPHICS(0)
+    scrmem=PEEKC(88)        ;adres poczatku pamieci obrazu
+    fntmem=PEEKC(@font)     ;adres zmiennej font w pamieci
+    MOVEBLOCK(setnew*256,57344,1024) ;kopiowanie tablicy znakow na nowe miejsce
+    MOVEBLOCK(setnew*256,fntmem,512) ;pierwsze znaki - plansza
+    POKE(756,setnew)        ;wskazanie nowego adresu znakow
+	POKE(731,1);dzwiek klawiszy def.0
+    POKE(752,1);kursor def.0
+    POKE(82,0); lewy margines
+RETURN
+
+PROC ClsGr()
+SETBLOCK(scrmem,240,2)
+RETURN
+
+;---------------------------------- inicjalizacja pustego ekranu gry
+PROC InitCol()
+	POKE(708,21)  ;srodowisko - braz
+	POKE(709,200) ;dobre- zielone
+	POKE(710,72)  ;zle - fiolet
+	POKE(711,30)  ;ramka,hiro - zloty
+	POKE(712,0)   ;tlo
+RETURN
+
+PROC ramka_pusta()
+    CARD blkmem
+    blkmem=PEEKC(@blank)    ;adres zmiennej blank w pamieci
+    MOVEBLOCK(scrmem,blkmem,11)
+    FOR i=1 TO 9
+        DO
+        MOVEBLOCK(scrmem+(i*20),blkmem+11,11)
+        OD
+    MOVEBLOCK(scrmem+200,blkmem+22,11)
+RETURN
+
+PROC ramka_hole()
+    CARD blkmem
+    blkmem=PEEKC(@hole)    ;adres zmiennej blank w pamieci
+    MOVEBLOCK(scrmem,blkmem,11)
+    FOR i=1 TO 9
+        DO
+        MOVEBLOCK(scrmem+(i*20),blkmem+11,11)
+        OD
+    MOVEBLOCK(scrmem+200,blkmem+22,11)
+RETURN
+
+PROC plansza_pusta()
+    FOR i=1 TO 9 STEP 2
+        DO
+        SETBLOCK(scrmem+(i*20)+1,9,2)
+        Pause(2)
+		OD
+    FOR i=1 TO 9
+        DO
+        SETBLOCK(scrmem+(i*20)+1,9,2)
+        Pause(1)
+		OD
+		
+RETURN
+

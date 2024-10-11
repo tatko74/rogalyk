@@ -1,0 +1,209 @@
+;----------------------
+; 
+; generaTOr poziomow
+;
+; PosP(BYTE x,y) - wyszukanie pozycji w plan na pODstawie x,y
+; GETIT(BYTE x,y) - pobranie warTOsci z planu
+; SETIT(BYTE x,y,c) - ustawienie warTOsci w planie 
+; GEN_zerowanie() - czyszczenie tablic planu
+; GEN_Room() - generowanie lokacji
+; GEN_pokrycielokacji() - wyszukanie pokrywajacych sie lokacji
+; GEN_szukrODzic() - wyszukiwanie rODzicow lokacji
+; GEN_ustalszczyt() - wyznaczanie centr lokacji rODzicow
+; GEN_laczcentra() - polaczenia centr rODzicow - korytarze
+; GEN_LokacjeNaPLAN() -rysowanie lokacji na planie
+; GEN_mur() - buDOwanie scian DO okola lokacji
+; GeneraTOr_Poziomu() - procedura laczaca generaTOry w calosc
+;----------------------
+
+
+
+; czyszczenie tablicy PLAN
+PROC Generator_Poziomu()
+ BYTE dx1,dy1,dx2,dy2,txx
+ INT dx,dy
+
+ramka_hole()
+
+POKE(scrmem+20+5,9+192)
+
+ZERO(PlanAdr,2500-1)
+ FOR i=0 TO rmi 
+    DO 
+        rv(i)=0 rx(i)=0 ry(i)=0 rw(i)=0
+		rh(i)=0 rt(i)=0 rcv(i)=0 rcx(i)=0 rcy(i)=0 
+		rct(i)=0
+    OD
+
+; generowanie lokacji
+
+ FOR i=0 TO rmi
+    DO
+        rv(i)=i+1
+        rx(i)=randr(mx-rms2)+1
+        ry(i)=randr(my-rms2)+1
+        rw(i)=randr(rms2-rms1)+1
+        rh(i)=randr(rms2-rms1)+1
+        IF rw(i)+rx(i)>mx THEN
+            rw(i)=mx-rx(i)
+            FI
+        IF rh(i)+ry(i)>my THEN 
+            rh(i)=my-ry(i)
+            FI
+        rt(i)=0
+    OD
+
+; wyszukanie pokrywajacych sie lokacji
+
+poke(scrmem+20+5,2)
+poke(scrmem+40+5,9+192)
+
+ FOR i=0 TO rmi
+    DO
+    FOR ii=0 TO rmi
+        DO
+        tx=0
+        ty=0
+        IF rx(ii)>=rx(i) and rx(ii)<=rx(i)+rw(i) THEN tx=1 FI
+        IF ry(ii)>=ry(i) and ry(ii)<=ry(i)+rh(i) THEN ty=1 FI
+        IF rx(ii)+rw(ii)>=rx(i) and rx(ii)+rw(ii)<=rx(i)+rw(i) THEN tx=1 FI
+        IF ry(ii)+rh(ii)>=ry(i) and ry(ii)+rh(ii)<=ry(i)+rh(i) THEN ty=1 FI
+        IF tx=1 and ty=1 THEN rv(ii)=rv(i) FI
+        OD
+    OD
+
+poke(scrmem+40+5,2)
+poke(scrmem+60+5,9+192)
+
+; wyszukiwanie rodzicow lokacji
+
+ tx=1
+ FOR i=0 TO rmi
+    DO
+    ty=0
+    IF rt(i)=0 THEN 
+        FOR ii=0 TO rmi
+            DO
+            IF rv(ii)=rv(i) and ii<>i THEN rt(ii)=1:ty=1 FI
+            OD
+        FI
+    IF ty=1 THEN tx==+1 FI
+    OD
+
+
+
+; wyznaczanie centr rodzicow
+
+ ii=0 
+ FOR i=0 TO rmi
+    DO
+        IF rt(i)=0 THEN 
+            rcv(ii)=rv(i) 
+            rcx(ii)=rx(i)+(rw(i)/2)
+            rcy(ii)=ry(i)+(rh(i)/2)
+            ii==+1
+        FI
+    OD
+    rc=ii
+
+poke(scrmem+60+5,2)
+poke(scrmem+80+5,9+192)
+
+
+; polaczenia centr rodzicow
+
+ FOR i=0 TO rmi
+    DO
+    IF rcv(i)<>0 and rcv(i+1)<>0 THEN 
+    ii=2
+    dx1=rcx(i):dx2=rcx(i+1)
+    dy1=rcy(i):dy2=rcy(i+1)
+    IF dx1<dx2 THEN dx=1 else dx=-1 FI
+    tx=dx1
+    WHILE tx<>dx2
+            DO
+            SETIT(tx,dy1,ii)
+            tx==+dx
+            OD
+    IF dy1<dy2 THEN dy=1 else dy=-1 FI
+
+    ty=dy1  
+    WHILE ty<>dy2
+            DO
+            SETIT(dx2,ty,ii)
+            ty==+dy
+            OD
+        tx=0:ty=0:dx=0:dy=0:dx2=0:dy2=0:dx1=0:dy1=0:txx=0
+    FI
+    OD
+
+; rysowanie lokacji na planie
+
+poke(scrmem+80+5,2)
+poke(scrmem+100+5,9+192)
+
+ FOR i=0 TO rmi
+    DO
+    FOR tx=rx(i) TO rx(i)+rw(i)
+        DO
+        FOR ty=ry(i) TO ry(i)+rh(i)
+            DO
+                SETIT(tx,ty,2)
+            OD
+        OD
+    OD
+
+; buDOwanie scian do okola lokacji
+
+poke(scrmem+100+5,2)
+poke(scrmem+120+5,9+192)
+
+FOR tx=0 TO mx
+        DO
+        FOR ty=0 TO my
+            DO
+                i=GETIT(tx,ty) 
+                IF i=2 THEN
+                    IF tx>0 and GETIT(tx-1,ty)=0 THEN SETIT(tx-1,ty,1) FI
+                    IF tx<mx and GETIT(tx+1,ty)=0 THEN SETIT(tx+1,ty,1) FI
+                    IF ty>0 and GETIT(tx,ty-1)=0 THEN SETIT(tx,ty-1,1) FI
+                    IF ty<my and GETIT(tx,ty+1)=0 THEN SETIT(tx,ty+1,1) FI  
+                    IF tx>0 and ty>0 and GETIT(tx-1,ty-1)=0 THEN SETIT(tx-1,ty-1,1) FI
+                    IF tx<mx and ty<my and GETIT(tx+1,ty+1)=0 THEN SETIT(tx+1,ty+1,1) FI
+                    IF ty>0 and tx<mx and GETIT(tx+1,ty-1)=0 THEN SETIT(tx+1,ty-1,1) FI
+                    IF ty<my and tx>0 and GETIT(tx-1,ty+1)=0 THEN SETIT(tx-1,ty+1,1) FI 
+                FI
+            OD
+        OD
+
+
+poke(scrmem+120+5,2)
+poke(scrmem+140+5,9+192)
+
+    Generator_Enemy()
+
+; procedura wstawiajaca klucz i wyjscie
+
+	DO ;klucz
+    i=randr(rc)
+	UNTIL GETIT(rcx(i),rcy(i))=2 
+	OD
+	rit(0)=rcx(i) rit(1)=rcy(i)
+    SETIT(rit(0),rit(1),06+192)
+
+	DO ;wyjscie
+	ii=randr(rc) 
+	UNTIL ii#i & GETIT(rcx(ii),rcy(ii))=2 
+	OD
+		rit(2)=rcx(ii) rit(3)=rcy(ii) 
+	SETIT(rit(2),rit(3),07+64)
+	
+poke(scrmem+140+5,2)
+poke(scrmem+160+5,9+192)	
+
+MOVEBLOCK(scrmem+100+3,text,5)
+MOVEBLOCK(scrmem+120+4,text+5,4)
+
+DO UNTIL Joy(0)>16 OD
+
+RETURN
