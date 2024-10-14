@@ -67,8 +67,9 @@ BYTE jdir,x,y,x2,y2,xyw
 	ClsGr() 
     DO
        Generator_Poziomu()
-	   ;Generator_Enemy()
        ramka_pusta()
+
+
 
 		hx=rx(0) hy=ry(0) ; wspol. bohatera
         x2=hx y2=hy
@@ -76,16 +77,16 @@ BYTE jdir,x,y,x2,y2,xyw
 		MapViz(x2,y2) 
 		EneMov()
 		EneViz()
-		
 		Vram2Scr()
+        HeroDrw()
+
 		POSITION(12,1)
 		PutD(6,108) PutD(6,118) PutD(6,108) PutD(6,2)
-		PRINTBD(6,LevelCurr)
+		cyf2(LevelCurr,3)	
 		
-        HeroDrw()
 ;---------------------------------------------		
         DO
-            jdir = Joy(0)
+            jdir = Joy()
 			IF jdir=14 AND hy>0  THEN y2=hy-1 FI ;u
             IF jdir=13 AND hy<my THEN y2=hy+1 FI ;d
             IF jdir=11 AND hx>0  THEN x2=hx-1 FI ;l

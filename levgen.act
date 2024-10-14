@@ -1,19 +1,7 @@
 ;----------------------
 ; 
 ; generaTOr poziomow
-;
-; PosP(BYTE x,y) - wyszukanie pozycji w plan na pODstawie x,y
-; GETIT(BYTE x,y) - pobranie warTOsci z planu
-; SETIT(BYTE x,y,c) - ustawienie warTOsci w planie 
-; GEN_zerowanie() - czyszczenie tablic planu
-; GEN_Room() - generowanie lokacji
-; GEN_pokrycielokacji() - wyszukanie pokrywajacych sie lokacji
-; GEN_szukrODzic() - wyszukiwanie rODzicow lokacji
-; GEN_ustalszczyt() - wyznaczanie centr lokacji rODzicow
-; GEN_laczcentra() - polaczenia centr rODzicow - korytarze
-; GEN_LokacjeNaPLAN() -rysowanie lokacji na planie
-; GEN_mur() - buDOwanie scian DO okola lokacji
-; GeneraTOr_Poziomu() - procedura laczaca generaTOry w calosc
+
 ;----------------------
 
 
@@ -204,6 +192,10 @@ poke(scrmem+160+5,9+192)
 MOVEBLOCK(scrmem+100+3,text,5)
 MOVEBLOCK(scrmem+120+4,text+5,4)
 
-DO UNTIL Joy(0)>16 OD
+
+DO UNTIL Joy()>16 OD
+
+
+
 
 RETURN
