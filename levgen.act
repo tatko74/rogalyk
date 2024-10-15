@@ -173,18 +173,27 @@ poke(scrmem+140+5,9+192)
 ; procedura wstawiajaca klucz i wyjscie
 
 	DO ;klucz
-    i=randr(rc)
+    i=randr(rc-1)+1
 	UNTIL GETIT(rcx(i),rcy(i))=2 
 	OD
 	rit(0)=rcx(i) rit(1)=rcy(i)
     SETIT(rit(0),rit(1),06+192)
 
 	DO ;wyjscie
-	ii=randr(rc) 
+	ii=randr(rc-1)+1 
 	UNTIL ii#i & GETIT(rcx(ii),rcy(ii))=2 
 	OD
 		rit(2)=rcx(ii) rit(3)=rcy(ii) 
 	SETIT(rit(2),rit(3),07+64)
+	
+	ii=0
+	DO ;gold
+	tx=randr(mx)
+	ty=randr(my)
+	if GETIT(tx,ty)=2 then  SETIT(tx,ty,3+192) ii==+1  fi
+	UNTIL ii>5 
+	OD
+	
 	
 poke(scrmem+140+5,2)
 poke(scrmem+160+5,9+192)	

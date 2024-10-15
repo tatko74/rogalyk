@@ -42,7 +42,14 @@ PROC HeroDrw()
 POKE(scrmem+105,9+192)   
 RETURN
 
-
+PROC Tablica()
+	MOVEBLOCK(scrmem+12,text+9,3) ;poke(scrmem+16, $20+192) 
+	cyf2(scrmem+17,LevelCurr,3) ;level
+	poke(scrmem+52,$09+192) cyf2(scrmem+53,heroS(0),1) ;ilo zyc
+	poke(scrmem+56,$03+192) cyf2(scrmem+57,heroS(1),1);gold
+	poke(scrmem+92,$05+192) cyf2(scrmem+93,heroS(2),1) poke(scrmem+96, $20+192) cyf2(scrmem+97,heroS(3),2) ;atak
+	poke(scrmem+132,$04+192) cyf2(scrmem+133,heroS(4),1) poke(scrmem+136, $20+192) cyf2(scrmem+137,heroS(5),2) ;hp
+RETURN
 
 ; procedura glowna -------------------------------------------------------
 PROC MAIN()
@@ -66,7 +73,9 @@ BYTE jdir,x,y,x2,y2,xyw
 	
 	ClsGr() 
     DO
-       Generator_Poziomu()
+       Tablica()
+	   
+	   Generator_Poziomu()
        ramka_pusta()
 
 
@@ -80,12 +89,11 @@ BYTE jdir,x,y,x2,y2,xyw
 		Vram2Scr()
         HeroDrw()
 
-		POSITION(12,1)
-		PutD(6,108) PutD(6,118) PutD(6,108) PutD(6,2)
-		cyf2(LevelCurr,3)	
-		
 ;---------------------------------------------		
         DO
+		
+	    Tablica()
+		
             jdir = Joy()
 			IF jdir=14 AND hy>0  THEN y2=hy-1 FI ;u
             IF jdir=13 AND hy<my THEN y2=hy+1 FI ;d
@@ -102,18 +110,28 @@ BYTE jdir,x,y,x2,y2,xyw
             IF xyw=2 THEN 
 				hx=x2 hy=y2 
 				ELSE
-				y2=hy x2=hx
-		       FI
-			IF xyw=06+192 THEN 
+				;y2=hy x2=hx
+		       ;FI
+			
+			IF xyw=3+192 THEN ; gold
+				;hx=x2 hy=y2 
+                SETIT(x2,y2,2)
+				heroS(1)==+1
+                y2=hy x2=hx
+                FI
+			
+			IF xyw=06+192 THEN ; key
                 SETIT(rit(2),rit(3),08+64)
                 SETIT(rit(0),rit(1),2)
 				y2=hy x2=hx
                 FI
-            IF xyw=08+64 THEN 
+            IF xyw=08+64 THEN ;exit 
 				LevelCurr==+1
 				EXIT 
                FI			   
-			   
+			 
+			 FI
+			 
 			MapViz(x2,y2)
 			EneMov()
 			EneViz()

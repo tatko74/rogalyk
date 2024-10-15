@@ -5,8 +5,8 @@
 ;----------------------
 
 MODULE
-BYTE mx=[49];max 49
-BYTE my=[49];max 49
+BYTE mx=[29];max 49
+BYTE my=[29];max 49
 BYTE ARRAY plan(2500) ; plan 
 BYTE ARRAY vramtab(257) ; bufor 
 
@@ -22,7 +22,8 @@ BYTE ARRAY rcx(40) ; x centra
 BYTE ARRAY rcy(40) ; y centra
 BYTE ARRAY rct(40) ; tmp centra
 
-BYTE hx,hy ; wspol. playera
+BYTE hx,hy; wspol. playera
+BYTE ARRAY heroS=[3 0 5 7 5 7] ; il.zyc gold atakT atakF hpT hpF
 BYTE ARRAY rit(4) ; key exit
 
 
@@ -45,10 +46,10 @@ CARD PlanAdr, VRam, scrmem, text
 BYTE i,ii,tx,ty
 
 BYTE ARRAY font =[
-$00 $00 $00 $04 $00 $40 $00 $00 ; $02 -gleba
+$00 $00 $00 $04 $00 $40 $00 $00 ; $00 -gleba
 $00 $2E $7D $76 $7F $2D $7E $14 ; $01 -glaz
-$00 $00 $00 $00 $00 $00 $00 $00 ; $00 -null
-$00 $00 $7E $24 $5A $42 $7E $00 ; $03 -gold
+$00 $00 $00 $00 $00 $00 $00 $00 ; $02 -null
+$24 $01 $80 $1C $2E $22 $1C $00 ; $03 -gold
 $00 $66 $5A $66 $5A $24 $18 $00 ; $04 -tarcz
 $00 $40 $20 $10 $0A $04 $0A $00 ; $05 -miecz
 $00 $30 $50 $70 $08 $04 $02 $04 ; $06 -klucz
@@ -125,4 +126,6 @@ BYTE ARRAY hole =[
 BYTE ARRAY texts =[
 240 242 229 243 243 ; press
 230 233 242 229 ; fire
+108 118 108 ; lvl
+
 ]

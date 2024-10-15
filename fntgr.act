@@ -20,7 +20,7 @@ PROC InitChar()
     CARD fntmem
     setnew=PEEK(106)-8
     POKE(106,setnew)        ;obniżenie gornej granicy ram
-    GRAPHICS(2+16)
+    GRAPHICS(2)
 	;GRAPHICS(0)
     scrmem=PEEKC(88)        ;adres poczatku pamieci obrazu
     fntmem=PEEKC(@font)     ;adres zmiennej font w pamieci

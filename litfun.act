@@ -52,10 +52,6 @@ Proc Pause(CARD ile)
 RETURN
 
 ;   Odczyt stanu joystick'a
-;   10 14 06
-;   11 15 07
-;   09 13 05
-;   fire +16
 
 BYTE FUNC Joy() 
 byte direct,fire
@@ -68,17 +64,16 @@ byte direct,fire
   pause(5)
 RETURN(direct)
 
-proc cyf2(BYTE nu,co) 
-if co=0 then co=48
-elseif co=1 then co=16
-elseif co=2 then co=176
-elseif co=3 then co=144 
+proc cyf2(card wher,BYTE nu,co) 
+if co=0 then co=16
+elseif co=1 then co=80
+elseif co=2 then co=144
+elseif co=3 then co=208 
 fi
 
-putd(6,(nu /100)+co)  
-putd(6,((nu mod 100)/10)+co)
-putd(6,(nu mod 10)+co)
-
+poke(wher,(nu /100)+co)
+poke(wher+1,((nu mod 100)/10)+co)
+poke(wher+2,(nu mod 10)+co)
 
 RETURN
 
