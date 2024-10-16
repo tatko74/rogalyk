@@ -20,7 +20,7 @@ PROC InitChar()
     CARD fntmem
     setnew=PEEK(106)-8
     POKE(106,setnew)        ;obniżenie gornej granicy ram
-    GRAPHICS(2)
+    GRAPHICS(2+16)
 	;GRAPHICS(0)
     scrmem=PEEKC(88)        ;adres poczatku pamieci obrazu
     fntmem=PEEKC(@font)     ;adres zmiennej font w pamieci
@@ -60,9 +60,16 @@ PROC ramka_hole()
     CARD blkmem
     blkmem=PEEKC(@hole)    ;adres zmiennej blank w pamieci
     MOVEBLOCK(scrmem,blkmem,11)
-    FOR i=1 TO 9
+	    FOR i=1 TO 9 step 2
         DO
         MOVEBLOCK(scrmem+(i*20),blkmem+11,11)
+		pause(2)
+        OD
+		
+    FOR i=2 TO 9 step 2
+        DO
+        MOVEBLOCK(scrmem+(i*20),blkmem+11,11)
+		pause(2)
         OD
     MOVEBLOCK(scrmem+200,blkmem+22,11)
 RETURN
