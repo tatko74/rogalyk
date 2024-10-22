@@ -28,7 +28,8 @@ BYTE ARRAY rit(4) ; key exit
 
 
 BYTE ARRAY ev(40) ; id wrog
-BYTE ARRAY ec(40) ; klasa wroga
+BYTE ARRAY ec(40) ; klasa wroga (atak)
+BYTE ARRAY ea(40) ; hp wroga 
 BYTE ARRAY ex(40) ; x wroga
 BYTE ARRAY ey(40) ; y wroga
 BYTE ARRAY ed(40) ; dystans wroga
@@ -43,7 +44,7 @@ BYTE rmi=[10] ; ilosc startowa lokacji
 BYTE LevelCurr=[1]
 CARD PlanAdr, VRam, scrmem, text
 ;------ streamfuck
-BYTE i,ii,tx,ty
+BYTE i,ii,tx,ty,gtic=[0]
 
 BYTE ARRAY font =[
 $00 $00 $00 $04 $00 $40 $00 $00 ; $00 -gleba

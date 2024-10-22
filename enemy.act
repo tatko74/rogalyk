@@ -5,6 +5,7 @@ FOR i=0 TO rc-1
 	IF rcv(i)>0 THEN
 		ev(i)=i+1 ex(i)=rcx(i) ey(i)=rcy(i) 
 		ec(i)=randr(5)+1
+		ea(i)=ec(i)
 		FI
 	OD
 RETURN
@@ -48,20 +49,28 @@ FOR i=0 TO rc-1
 
 			IF tx<>hx OR ty<>hy THEN 
 				
-					FOR test=0 TO rc-1
+					FOR test=0 TO rc-1 ; czy nie wlazi na innego wroga
 					DO
 						IF ev(test)>0 AND ev(test)<>ev(i) THEN
-						IF tx=ex(test) AND ty=ey(test) THEN tru=0 EXIT FI
+							IF tx=ex(test) AND ty=ey(test) THEN tru=0 EXIT FI
 						FI
 					OD
-				
-				IF tru=1 THEN ex(i)=tx ey(i)=ty FI
-				FI
-				
+					
+			FI
+			
+			IF tx=hx and ty=hy THEN ; atak
+				heroS(4)=heroS(4)-ec(i)
+				POKE(scrmem+105,9+128)   
+				pause(2)			
+			tru=0 
+			FI
+		IF tru=1 THEN ex(i)=tx ey(i)=ty FI				
 		tru=0 
 		FI
 	OD
 RETURN
+
+
 
 PROC EneViz()
 BYTE txi,tyi

@@ -118,6 +118,19 @@ BYTE jdir,x,y,x2,y2,xyw
 			xyw=GETIT(x2,y2)
 
             IF xyw=2 or xyw=3+192 or xyw=6+192 or xyw=8+64 or xyw=7+64 or xyw=4 or xyw=5 THEN 
+				
+				for i=0 to rc-1
+					do
+						IF ev(i)>0 THEN
+							if ex(i)=x2 and ey(i)=y2 then
+
+								if ea(i)>heroS(2) then ea(i)=ea(i)-heroS(2)
+									elseif ea(i)<=heroS(2) then ea(i)=0 ev(i)=0
+								fi
+							fi
+						fi
+					od
+				
 				hx=x2 hy=y2 
 				else
 				x2=hx y2=hy 
@@ -151,12 +164,13 @@ BYTE jdir,x,y,x2,y2,xyw
 				   FI			   
 			 
 			 
-			MapViz(x2,y2)
-			EneMov()
+			MapViz(hx,hy)
+			if gtic=5 then EneMov() gtic=0 fi
 			EneViz()
 			Vram2Scr(0)
             HeroDrw()
 			jdir=0
+			gtic==+1
        OD  
 ;---------------------------------------------	   
 	   
