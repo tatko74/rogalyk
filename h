@@ -50,7 +50,13 @@ ZERO(VRam,80)
 RETURN
 
 PROC HeroDrw()
+if heroS(4)<>0 then
 POKE(scrmem+105,9+192)   
+else
+POKE(scrmem+105,$1A)   
+pause(5)
+fi
+
 RETURN
 
 PROC Tablica()
@@ -84,6 +90,7 @@ BYTE jdir,x,y,x2,y2,xyw
 	;POKE(538,8)
 	
 	ClsGr() 
+	
     DO
        Tablica()
 	   
@@ -103,7 +110,12 @@ BYTE jdir,x,y,x2,y2,xyw
 		
 	    Tablica()
 		
-            jdir = Joy()
+            if heroS(4)<>0 then jdir = Joy()
+			else
+			heroS(0)==-1
+			exit
+			fi
+			
 			IF jdir=14 AND hy>0  THEN y2=hy-1 FI ;u
             IF jdir=13 AND hy<my THEN y2=hy+1 FI ;d
             IF jdir=11 AND hx>0  THEN x2=hx-1 FI ;l
@@ -136,15 +148,15 @@ BYTE jdir,x,y,x2,y2,xyw
 				x2=hx y2=hy 
 			FI
 				
-				IF xyw=4 THEN ; atak
+				IF xyw=4 THEN ; HP
 					SETIT(x2,y2,2)
-					heroS(4)==+1
+					heroS(4)==+5
 					if heroS(4)>heroS(5) then heroS(5)=heroS(4) fi
 					FI
 			
-				IF xyw=5 THEN ; obro
+				IF xyw=5 THEN ; atak
 					SETIT(x2,y2,2)
-					heroS(2)==+1
+					heroS(2)==+2
 					if heroS(2)>heroS(3) then heroS(3)=heroS(2) fi
 					FI
 				
