@@ -1,32 +1,26 @@
-
-proc cyf2byt(byte n,c) 
-byte cros=[48]
-if c=0 then elseif c=1 then cros=cros+96 elseif c=2 then cros=cros+128 elseif c=3 then cros=cros+160 fi
-
-putd(6,(n /100)+cros)  
-putd(6,((n mod 100)/10)+cros)
-putd(6,(n mod 10)+cros)
-putde(6)
-
-RETURN
-
+BYTE CH=$02FC, FK=$D01F
 
 PROC MAIN()
-byte a
+byte test,test2
+CH=255 
+DO 
 
-graphics(2)
+;test=CH
+;if test<>255 and test<>28 then 
+;		printb(test) 
+;		CH=255 
+;elseif test=28 then 
+;	exit 
+;fi
 
-POKE(708,21)  ;srodowisko - braz
-POKE(709,200) ;dobre- zielone
-POKE(710,72)  ;zle - fiolet
-POKE(711,30)  ;ramka,hiro - zloty
-POKE(712,0)   ;tlo
+test2=FK
+;if test2<>8 then 
+		printb(test2) 
+		FK=8 
+;fi
 
-cyf2byt(1,0)
-cyf2byt(20,1)
-cyf2byt(100,2)
-cyf2byt(305,3)
 
-a=getd(7)
+
+OD
 
 RETURN
