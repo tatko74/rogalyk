@@ -54,7 +54,9 @@ if heroS(4)<>0 then
 POKE(scrmem+105,9+192)   
 else
 POKE(scrmem+105,$1A)   
-pause(5)
+pause(20)
+
+ 
 fi
 
 RETURN
@@ -92,8 +94,10 @@ BYTE jdir,x,y,x2,y2,xyw
 	ClsGr() 
 	
     DO
-       Tablica()
-	   
+       if heroS(0)=0 THEN
+	   ;ens-------------------
+	   fi
+	   Tablica()
 	   Generator_Poziomu()
        ramka_pusta()
 		hx=rx(0) hy=ry(0) ; wspol. bohatera
@@ -113,6 +117,8 @@ BYTE jdir,x,y,x2,y2,xyw
             if heroS(4)<>0 then jdir = Joy()
 			else
 			heroS(0)==-1
+			heroS(4)=heroS(5)
+			heroS(2)=heroS(3)
 			exit
 			fi
 			
