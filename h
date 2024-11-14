@@ -80,7 +80,13 @@ BYTE jdir,x,y,x2,y2,xyw
 	;Open (7,"K:",4,0)	
 	
     InitChar()
-    InitCol()
+	InitCol()
+	
+	DLset(1)
+	CH=255	DO UNTIL CH=28 OD CH=255	
+	DLset(2)
+    
+	
 	PlanAdr=PEEKC(@plan)
 	VRam=PEEKC(@vramtab)
 	text=PEEKC(@texts)

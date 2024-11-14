@@ -18,11 +18,18 @@
 PROC InitChar()
     BYTE setnew
     CARD fntmem
-    setnew=PEEK(106)-8
-    POKE(106,setnew)        ;obniżenie gornej granicy ram
-    GRAPHICS(2+16)
+	
+
+    ;setnew=PEEK(106)-8
+    ;POKE(106,setnew)        ;obniżenie gornej granicy ram
+	setnew=152
+	POKE(106,setnew) 
+	GRAPHICS(2)
+   ; GRAPHICS(2+16)
 	;GRAPHICS(0)
-    scrmem=PEEKC(88)        ;adres poczatku pamieci obrazu
+    ;scrmem=PEEKC(88)   	;adres poczatku pamieci obrazu
+	scrmem=$9330
+	POKEC(88,scrmem)
     fntmem=PEEKC(@font)     ;adres zmiennej font w pamieci
     MOVEBLOCK(setnew*256,57344,1024) ;kopiowanie tablicy znakow na nowe miejsce
     MOVEBLOCK(setnew*256,fntmem,512) ;pierwsze znaki - plansza
@@ -30,19 +37,50 @@ PROC InitChar()
 	POKE(731,1);dzwiek klawiszy def.0
     POKE(752,1);kursor def.0
     POKE(82,0); lewy margines
+
 RETURN
 
+PROC DLset(byte dl)
+BYTE TEMP
+
+
+TEMP=peek($022F)
+poke($022F,0)
+pokec($230,$9300)
+
+if  dl=1 then
+moveblock($9300,DL1,36)
+setblock(scrmem,840,2)
+moveblock($9330,Pic1,640)
+elseif dl=2 then
+moveblock($9300,DL2,29)
+setblock(scrmem,540,2)
+moveblock(scrmem+220,Pic2,320)
+fi
+
+poke($022F,TEMP)
+
+return
+
 PROC ClsGr()
-SETBLOCK(scrmem,240,2)
+SETBLOCK(scrmem,220,2)
 RETURN
 
 ;---------------------------------- inicjalizacja pustego ekranu gry
 PROC InitCol()
+	;POKE(708,6)  ;srodowisko - braz 21
+	;POKE(709,$B6) ;dobre- zielone
+	;POKE(710,$28)  ;zle - fiolet 72
+	;POKE(711,30)  ;ramka gry,hiro - zloty
+	;POKE(712,0)   ;tlo
+	;old
+	
 	POKE(708,6)  ;srodowisko - braz 21
-	POKE(709,$B6) ;dobre- zielone
-	POKE(710,$28)  ;zle - fiolet 72
-	POKE(711,30)  ;ramka gry,hiro - zloty
-	POKE(712,0)   ;tlo
+	POKE(709,30) ;dobre- zielone
+	POKE(710,40)  ;zle - fiolet 72
+	POKE(711,182)  ;ramka gry,hiro - zloty
+	POKE(712,0) 
+	
 RETURN
 
 PROC ramka_pusta()
