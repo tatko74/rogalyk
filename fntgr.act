@@ -24,7 +24,7 @@ PROC InitChar()
     ;POKE(106,setnew)        ;obniżenie gornej granicy ram
 	setnew=152
 	POKE(106,setnew) 
-	GRAPHICS(2)
+	;GRAPHICS(2)
    ; GRAPHICS(2+16)
 	;GRAPHICS(0)
     ;scrmem=PEEKC(88)   	;adres poczatku pamieci obrazu
