@@ -177,7 +177,7 @@ poke(scrmem+140+5,9+192)
 	DO ;wyjscie
 	tx=randr(mx)
 	ty=randr(my)
-	if GETIT(tx,ty)=2 then  SETIT(tx,ty,7+64) ii=1 rit(2)=tx rit(3)=ty  fi
+	if GETIT(tx,ty)=2 then  SETIT(tx,ty,7+192) ii=1 rit(2)=tx rit(3)=ty  fi
 	UNTIL ii=1 
 	OD
 	
@@ -186,7 +186,7 @@ poke(scrmem+140+5,9+192)
 	DO ;klucz
 	tx=randr(mx)
 	ty=randr(my)
-	if GETIT(tx,ty)=2 then  SETIT(tx,ty,6+192) ii=1 rit(0)=tx rit(1)=ty  fi
+	if GETIT(tx,ty)=2 then  SETIT(tx,ty,6+64) ii=1 rit(0)=tx rit(1)=ty  fi ;192
 	UNTIL ii=1 
 	OD	
 	
@@ -214,7 +214,7 @@ poke(scrmem+140+5,9+192)
 	DO ;gold
 	tx=randr(mx)
 	ty=randr(my)
-	if GETIT(tx,ty)=2 then  SETIT(tx,ty,3+192) ii==+1  fi
+	if GETIT(tx,ty)=2 then  SETIT(tx,ty,3+64) ii==+1  fi ;192
 	UNTIL ii>5 
 	OD
 	

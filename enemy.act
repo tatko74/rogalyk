@@ -59,9 +59,12 @@ FOR i=0 TO rc-1
 			FI
 			
 			IF tx=hx and ty=hy THEN ; atak
-				if heroS(4)<=ec(i) then heroS(4)=0 ; daj...
+				if heroS(4)<=ec(i) then 
+						heroS(4)=0 ; daj...
+						POKE(712,$34) pause(10) POKE(712,0)
 					else
 					heroS(4)=heroS(4)-ec(i)
+						POKE(712,$30) pause(10) POKE(712,0)
 					fi
 				POKE(scrmem+105,9+128)   
 				pause(2)			

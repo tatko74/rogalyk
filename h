@@ -64,39 +64,44 @@ RETURN
 PROC Tablica()
 	MOVEBLOCK(scrmem+12,text+9,3) cyf2(scrmem+17,LevelCurr,3) ;level
 	poke(scrmem+52,9+192) cyf2(scrmem+53,heroS(0),1) ;ilo zyc
-	poke(scrmem+56,3+192) cyf2(scrmem+57,heroS(1),1);gold
-	poke(scrmem+92,5+192) cyf2(scrmem+93,heroS(2),1) ;atak
-	poke(scrmem+96,32+192) cyf2(scrmem+97,heroS(3),2) 
-	poke(scrmem+132,4+192) cyf2(scrmem+133,heroS(4),1) ;hp
-	poke(scrmem+136,32+192) cyf2(scrmem+137,heroS(5),2) 
+	poke(scrmem+92,3+192) cyf2(scrmem+93,heroS(1),1);gold
+	poke(scrmem+132,5+192) cyf2(scrmem+133,heroS(2),1) ;atak
+	poke(scrmem+136,32+192) cyf2(scrmem+137,heroS(3),2) 
+	poke(scrmem+172,4+192) cyf2(scrmem+173,heroS(4),1) ;hp
+	poke(scrmem+176,32+192) cyf2(scrmem+177,heroS(5),2) 
+	
 RETURN
 
 ; procedura glowna -------------------------------------------------------
 PROC MAIN()
 BYTE jdir,x,y,x2,y2,xyw
 
-    
-	;Close (7)
-	;Open (7,"K:",4,0)	
-	
     InitChar()
 	InitCol()
-	
-	DLset(1)
-	CH=255	DO UNTIL CH=28 OD CH=255	
-	DLset(2)
-    
-	
 	PlanAdr=PEEKC(@plan)
 	VRam=PEEKC(@vramtab)
 	text=PEEKC(@texts)
+
+
+	DO ;glowan petla
+	DLset(1)
+
+	MOVEBLOCK(scrmem+640+40+6,text,5)
+	MOVEBLOCK(scrmem+640+60+9,text+5,4)
+
+	POKE(77,0)
+	DO UNTIL Joy()>16 OR CH=33 OD
+
+	
+	DLset(2)
+    
+	
+
 	;scroll -----------------
 	meloadr=PEEKC(@skroltxt)
 	licznik=0
 
-	;POKEC(552,$XXXX) ; odwrocone miejscami po nazwie procki i C0
-	;POKE(538,8)
-	
+
 	ClsGr() 
 	
     DO
@@ -141,15 +146,19 @@ BYTE jdir,x,y,x2,y2,xyw
 			
 			xyw=GETIT(x2,y2)
 
-            IF xyw=2 or xyw=3+192 or xyw=6+192 or xyw=8+64 or xyw=7+64 or xyw=4 or xyw=5 THEN 
+            IF xyw=2 or xyw=3+64 or xyw=6+64 or xyw=8+192 or xyw=7+192 or xyw=4 or xyw=5 THEN 
 				
 				for i=0 to rc-1
 					do
 						IF ev(i)>0 THEN
 							if ex(i)=x2 and ey(i)=y2 then
 
-								if ea(i)>heroS(2) then ea(i)=ea(i)-heroS(2)
-									elseif ea(i)<=heroS(2) then ea(i)=0 ev(i)=0
+								if ea(i)>heroS(2) then ;atak < obrony wroga
+										ea(i)=ea(i)-heroS(2)  
+										POKE(712,$D0) pause(10) POKE(712,0)
+									elseif ea(i)<=heroS(2) then ;atak > obrony wroga
+										ea(i)=0 ev(i)=0
+										POKE(712,$D4) pause(10) POKE(712,0)
 								fi
 							fi
 						fi
@@ -172,17 +181,24 @@ BYTE jdir,x,y,x2,y2,xyw
 					if heroS(2)>heroS(3) then heroS(3)=heroS(2) fi
 					FI
 				
-				IF xyw=3+192 THEN ; gold
+				IF xyw=3+64 THEN ; gold
 					SETIT(x2,y2,2)
 					heroS(1)==+1
+					if heroS(1)>50 then
+						heroS(0)==+1
+						heroS(1)=0
+						POKE(712,$FF)
+						pause(15)
+						POKE(712,0)
+						fi
 					FI
 				
-				IF xyw=6+192 THEN ; key
-					SETIT(rit(2),rit(3),8+64)
+				IF xyw=6+64 THEN ; key
+					SETIT(rit(2),rit(3),8+192)
 					SETIT(rit(0),rit(1),2)
 					FI
 				
-				IF xyw=8+64 THEN ;exit 
+				IF xyw=8+192 THEN ;exit 
 					LevelCurr==+1
 					EXIT 
 				   FI			   
@@ -195,13 +211,17 @@ BYTE jdir,x,y,x2,y2,xyw
             HeroDrw()
 			jdir=0
 			gtic==+1
+			IF CH=28 THEN EXIT FI
+			POKE($0284,0) POKE(77,0)
        OD  
 ;---------------------------------------------	   
 	   
 	   
-	   ;stop()
+	
     plansza_pusta()
+	IF CH=28 THEN EXIT FI
     OD
-	;Close (7)
+	CH=255
+	OD
 RETURN
 
