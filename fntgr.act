@@ -126,3 +126,59 @@ PROC plansza_pusta()
 		
 RETURN
 
+PROC Tablica()
+	MOVEBLOCK(scrmem+12,text+9,3) cyf2(scrmem+17,LevelCurr,3) ;level
+	poke(scrmem+52,9+192) cyf2(scrmem+53,heroS(0),1) ;ilo zyc
+	poke(scrmem+92,3+192) cyf2(scrmem+93,heroS(1),1);gold
+	poke(scrmem+132,5+192) cyf2(scrmem+133,heroS(2),1) ;atak
+	poke(scrmem+136,32+192) cyf2(scrmem+137,heroS(3),2) 
+	poke(scrmem+172,4+192) cyf2(scrmem+173,heroS(4),1) ;hp
+	poke(scrmem+176,32+192) cyf2(scrmem+177,heroS(5),2) 
+	
+RETURN
+
+
+PROC MapViz(int x,y)
+	BYTE x3,y3
+    CARD plaoff
+    INT ofss
+    ii=9
+    IF x<4 THEN tx=x x3=4-x ELSE tx=4 x3=0 FI
+    IF y<4 THEN ty=y y3=4-y ELSE ty=4 y3=0 FI
+    IF x>mx-4 THEN ii=mx+5-x FI
+    ofss=PosP(x-tx,y-ty)
+    FOR i=0 TO 8-y3
+        DO
+        plaoff=(ofss+(i*(mx+1)))
+		MOVEBLOCK(VRam+x3+((i+y3)*9),PlanAdr+plaoff,ii-x3)
+        OD
+RETURN
+
+
+
+PROC Vram2Scr(byte ani)
+if ani=1 then
+ii=0
+FOR i=21 TO 181 STEP 40
+	DO
+	MOVEBLOCK(scrmem+i,VRam+ii,9)
+	ii=ii+9
+	Pause(2)
+	OD
+fi
+
+ii=0
+FOR i=21 TO 181 STEP 20
+	DO
+	MOVEBLOCK(scrmem+i,VRam+ii,9)
+	ii=ii+9
+	if ani=1 then Pause(1) fi	
+	OD
+ZERO(VRam,80)
+RETURN
+
+PROC HeroDrw()
+if heroS(4)<>0 then POKE(scrmem+105,9+192) else POKE(scrmem+105,$1A) pause(20) fi
+RETURN
+
+

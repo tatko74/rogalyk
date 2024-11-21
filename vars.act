@@ -44,9 +44,10 @@ BYTE rms2=[15] ; max. boku lokacji
 BYTE rmi=[10] ; ilosc startowa lokacji
 
 BYTE LevelCurr=[1]
-CARD PlanAdr, VRam, scrmem, text
+CARD PlanAdr, VRam, scrmem, text, txt2adr
 ;------ streamfuck
 BYTE i,ii,tx,ty,gtic=[0]
+BYTE lic=[0],lic2=[0]
 
 BYTE ARRAY font =[
 $00 $00 $00 $04 $00 $40 $00 $00 ; $00 -gleba
@@ -130,7 +131,7 @@ BYTE ARRAY texts =[
 112 114 101 115 115 ; press
 102 105 114 101 ; fire
 108 118 108 ; lvl
-103 97 109 101 2 111 118 101 114;game over
+103 97 109 101 26 26 111 118 101 114;game over
 ]
 
 BYTE ARRAY Pic1 = [0 170 168 0 0 0 0 0 0 10 0 0 128 0 0 0 0 0 0 0 0 1 0 0 16 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 ;640

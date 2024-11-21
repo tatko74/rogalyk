@@ -9,68 +9,8 @@ INCLUDE "H6:SKROL.ACT"
 
 
 
-PROC MapViz(int x,y)
-	BYTE x3,y3
-    CARD plaoff
-    INT ofss
-    ii=9
-    IF x<4 THEN tx=x x3=4-x ELSE tx=4 x3=0 FI
-    IF y<4 THEN ty=y y3=4-y ELSE ty=4 y3=0 FI
-    IF x>mx-4 THEN ii=mx+5-x FI
-    ofss=PosP(x-tx,y-ty)
-    FOR i=0 TO 8-y3
-        DO
-        plaoff=(ofss+(i*(mx+1)))
-		MOVEBLOCK(VRam+x3+((i+y3)*9),PlanAdr+plaoff,ii-x3)
-        OD
-RETURN
 
 
-
-PROC Vram2Scr(byte ani)
-
-if ani=1 then
-ii=0
-FOR i=21 TO 181 STEP 40
-	DO
-	MOVEBLOCK(scrmem+i,VRam+ii,9)
-	ii=ii+9
-	Pause(2)
-	OD
-fi
-
-ii=0
-FOR i=21 TO 181 STEP 20
-	DO
-	MOVEBLOCK(scrmem+i,VRam+ii,9)
-	ii=ii+9
-if ani=1 then Pause(1) fi	
-	OD
-ZERO(VRam,80)
-RETURN
-
-PROC HeroDrw()
-if heroS(4)<>0 then
-POKE(scrmem+105,9+192)   
-else
-POKE(scrmem+105,$1A)   
-pause(20)
-
- 
-fi
-
-RETURN
-
-PROC Tablica()
-	MOVEBLOCK(scrmem+12,text+9,3) cyf2(scrmem+17,LevelCurr,3) ;level
-	poke(scrmem+52,9+192) cyf2(scrmem+53,heroS(0),1) ;ilo zyc
-	poke(scrmem+92,3+192) cyf2(scrmem+93,heroS(1),1);gold
-	poke(scrmem+132,5+192) cyf2(scrmem+133,heroS(2),1) ;atak
-	poke(scrmem+136,32+192) cyf2(scrmem+137,heroS(3),2) 
-	poke(scrmem+172,4+192) cyf2(scrmem+173,heroS(4),1) ;hp
-	poke(scrmem+176,32+192) cyf2(scrmem+177,heroS(5),2) 
-	
-RETURN
 
 ; procedura glowna -------------------------------------------------------
 PROC MAIN()
@@ -81,16 +21,27 @@ BYTE jdir,x,y,x2,y2,xyw
 	PlanAdr=PEEKC(@plan)
 	VRam=PEEKC(@vramtab)
 	text=PEEKC(@texts)
-
+	txt2adr=PEEKC(@skroltxt)
+	
 
 	DO ;glowan petla
 	DLset(1)
-
+	heroS(0)=3 heroS(1)=0 heroS(2)=7 heroS(3)=7 heroS(4)=20 heroS(5)=20
+	LevelCurr=1
+	lic=0 lic2=0 gtic=0
 	MOVEBLOCK(scrmem+640+40+6,text,5)
 	MOVEBLOCK(scrmem+640+60+9,text+5,4)
 
 	POKE(77,0)
-	DO UNTIL Joy()>16 OR CH=33 OD
+	DO
+	lic2==+1
+
+	if lic2<4 then txt2() fi
+	if lic2=50 then lic2=0 fi
+
+
+	UNTIL Joy()>16 OR CH=33 
+	OD
 
 	
 	DLset(2)
@@ -98,15 +49,17 @@ BYTE jdir,x,y,x2,y2,xyw
 	
 
 	;scroll -----------------
-	meloadr=PEEKC(@skroltxt)
-	licznik=0
+
 
 
 	ClsGr() 
 	
     DO
        if heroS(0)=0 THEN
-	   ;ens-------------------
+	   MOVEBLOCK(scrmem+80+3,text+12,5)
+	   MOVEBLOCK(scrmem+100+3,text+17,5)
+	   pause(200)
+	   EXIT
 	   fi
 	   Tablica()
 	   Generator_Poziomu()
@@ -171,20 +124,20 @@ BYTE jdir,x,y,x2,y2,xyw
 				
 				IF xyw=4 THEN ; HP
 					SETIT(x2,y2,2)
-					heroS(4)==+5
+					heroS(4)==+1
 					if heroS(4)>heroS(5) then heroS(5)=heroS(4) fi
 					FI
 			
 				IF xyw=5 THEN ; atak
 					SETIT(x2,y2,2)
-					heroS(2)==+2
+					heroS(2)==+1
 					if heroS(2)>heroS(3) then heroS(3)=heroS(2) fi
 					FI
 				
 				IF xyw=3+64 THEN ; gold
 					SETIT(x2,y2,2)
 					heroS(1)==+1
-					if heroS(1)>50 then
+					if heroS(1)>49 then
 						heroS(0)==+1
 						heroS(1)=0
 						POKE(712,$FF)
@@ -205,7 +158,7 @@ BYTE jdir,x,y,x2,y2,xyw
 			 
 			 
 			MapViz(hx,hy)
-			if gtic=5 then EneMov() gtic=0 fi
+			if gtic=4 then EneMov() gtic=0 fi
 			EneViz()
 			Vram2Scr(0)
             HeroDrw()
