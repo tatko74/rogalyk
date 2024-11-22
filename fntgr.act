@@ -128,8 +128,8 @@ RETURN
 
 PROC Tablica()
 	MOVEBLOCK(scrmem+12,text+9,3) cyf2(scrmem+17,LevelCurr,3) ;level
-	poke(scrmem+52,9+192) cyf2(scrmem+53,heroS(0),1) ;ilo zyc
-	poke(scrmem+92,3+192) cyf2(scrmem+93,heroS(1),1);gold
+	poke(scrmem+54,9+192) cyf2(scrmem+55,heroS(0),1) ;ilo zyc
+	poke(scrmem+94,3+192) cyf2(scrmem+95,heroS(1),1);gold
 	poke(scrmem+132,5+192) cyf2(scrmem+133,heroS(2),1) ;atak
 	poke(scrmem+136,32+192) cyf2(scrmem+137,heroS(3),2) 
 	poke(scrmem+172,4+192) cyf2(scrmem+173,heroS(4),1) ;hp

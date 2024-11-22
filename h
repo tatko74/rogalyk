@@ -36,9 +36,9 @@ BYTE jdir,x,y,x2,y2,xyw
 	DO
 	lic2==+1
 
-	if lic2<4 then txt2() fi
-	if lic2=50 then lic2=0 fi
-
+	if lic2<4 then txt2(0) fi
+	if lic2>=70 AND lic2<=72 then txt2(1) fi
+	if lic2=80 then lic2=0 fi
 
 	UNTIL Joy()>16 OR CH=33 
 	OD
