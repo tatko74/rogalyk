@@ -226,7 +226,7 @@ MOVEBLOCK(scrmem+100+3,text,5)
 MOVEBLOCK(scrmem+120+4,text+5,4)
 
 
-DO UNTIL Joy()>16 OD
+DO UNTIL peek($0284)=0 OD
 plansza_pusta()
 
 

@@ -54,12 +54,11 @@ RETURN
 ;   Odczyt stanu joystick'a
 
 BYTE FUNC Joy() 
-byte direct,fire
+byte direct
   DO
   direct=peek($0278)
-  fire=peek($0284)
-  if fire=0 then direct=direct+16 fi
-  Until direct#15 or fire#0
+  if peek($0284)=0 then direct=direct+16 fi
+  Until direct#15 
   OD
   pause(5)
 RETURN(direct)

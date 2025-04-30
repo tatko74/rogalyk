@@ -33,34 +33,31 @@ BYTE jdir,x,y,x2,y2,xyw
 	MOVEBLOCK(scrmem+640+60+9,text+5,4)
 
 	POKE(77,0)
+	
+	;skroll na froncie
 	DO
 	lic2==+1
 
 	if lic2<4 then txt2(0) fi
 	if lic2>=70 AND lic2<=72 then txt2(1) fi
 	if lic2=80 then lic2=0 fi
-
-	UNTIL Joy()>16 OR CH=33 
+	pause(5)
+	UNTIL peek($0284)=0 OR CH=33 
 	OD
 
-	
+	; gramy
 	DLset(2)
-    
-	
-
-	;scroll -----------------
-
-
 
 	ClsGr() 
 	
     DO
-       if heroS(0)=0 THEN
-	   MOVEBLOCK(scrmem+80+3,text+12,5)
-	   MOVEBLOCK(scrmem+100+3,text+17,5)
-	   pause(200)
-	   EXIT
+       if heroS(0)=0 THEN ; czy trup
+		MOVEBLOCK(scrmem+80+3,text+12,5)
+		MOVEBLOCK(scrmem+100+3,text+17,5)
+		pause(200)
+		EXIT
 	   fi
+	   
 	   Tablica()
 	   Generator_Poziomu()
        ramka_pusta()
@@ -68,7 +65,7 @@ BYTE jdir,x,y,x2,y2,xyw
         x2=hx y2=hy
 		
 		MapViz(x2,y2) 
-		EneMov()
+		;EneMov()
 		EneViz()
 		Vram2Scr(1)
         HeroDrw()
@@ -158,7 +155,8 @@ BYTE jdir,x,y,x2,y2,xyw
 			 
 			 
 			MapViz(hx,hy)
-			if gtic=4 then EneMov() gtic=0 fi
+			EneMov()
+			;MapViz(hx,hy)
 			EneViz()
 			Vram2Scr(0)
             HeroDrw()
